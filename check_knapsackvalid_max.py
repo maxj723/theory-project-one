@@ -15,10 +15,12 @@ def validate_kp_SAT():
         (12, [1, 2, 3, 4, 5], True)
     ]
 
+    # Iterate through test cases and run kp_SAT on them
     for i, (value, coins, expected) in enumerate(test_cases, 1):
         result = kp_SAT(value, coins)
         is_correct = (result is not None) == expected
         
+        # display results
         print(f"Test case {i}:")
         print(f"  Value: {value}")
         print(f"  Coins: {coins}")

@@ -8,21 +8,30 @@ from scipy.optimize import curve_fit
 
 # solve knapsack problem similar to the dumb SAT 
 def kp_SAT(value, coins):
+    # Recursive function to run
     def dfs(curr, i, combo):
+        # Base Case: if the combo has a value eqaul to desired => valid combo
         if curr == value:
             return combo
+        # Base Case: No more coins to add or sum is greater than desired value
         if i >= len(coins) or curr > value:
             return None
+        # Skip coin: dont change current sum or combo, go to next coin
         skip = dfs(curr, i+1, combo)
+        # Take coin: add coin to combo and value to sum, go to next coin
         take = dfs(curr + coins[i], i+1, combo + [coins[i]])
+
+        # return if either have found a valid combo
         return skip if skip else take
     
+    # Run recursive function with base values
     return dfs(0, 0, [])
 
 # Read the test files and convert to usable format
 def read_testfile(filename):
     tests = []
     with open(filename, 'r') as fp:
+        # Iterate through each line, and put values into a dictionary
         for line in fp:
             test = line.strip().split(', ')
             test_dict = {'type': test[0],
@@ -34,13 +43,17 @@ def read_testfile(filename):
 
 # Run kp_SAT on test files
 def run_tests(test_file, data_file):
+    # Get all test cases
     tests = read_testfile(f'Test_Files/{test_file}')
+    # check if output file already exists
     file_exists = os.path.isfile(data_file)
     with open(data_file, 'a', newline='') as csvfile:
+        # open output file to write results too
         writer = csv.writer(csvfile)
         if not file_exists:
             writer.writerow(['Number of Inputs', 'Execution Time', 'Is Satisfiable'])
 
+        # Iterate through each test, run dumbSAT knapsack function on each
         for test in tqdm(tests):
             # time each test
             start_time = time.time()
